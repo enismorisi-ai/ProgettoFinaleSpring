@@ -1,0 +1,151 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title}">Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+    <!-- fragment NAVBAR  -->
+    <nav th:fragment="navbar" class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/}">Aulab Chronicle</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="#">Crea articolo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Accesso
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Register</a></li>
+                            <li><a class="dropdown-item" href="#">Login</a></li>
+                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                        </ul>
+                    </li>
+                    
+                </ul>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <!-- fine nav -->
+    
+    
+    <!-- Footer -->
+    <footer class="bg-light text-center ">
+        <div class="container p-4">
+            <section class="mb-4">
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt
+                    distinctio earum repellat quaerat voluptatibus placeat nam,
+                    commodi optio pariatur est quia magnam eum harum corrupti dicta,
+                    aliquam sequi voluptate quas.
+                </p>
+            </section>
+            <section class="">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-uppercase">Links</h5>
+                        
+                        <ul class="list-unstyled mb-0">
+                            <li>
+                                <a href="#!" class="text-dark">Link 1</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-dark">Link 2</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-dark">Link 3</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-dark">Link 4</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-uppercase">Links</h5>
+                        
+                        <ul class="list-unstyled mb-0">
+                            <li>
+                                <a href="#!" class="text-dark">Link 1</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-dark">Link 2</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-dark">Link 3</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-dark">Link 4</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-uppercase">Links</h5>
+                        
+                        <ul class="list-unstyled mb-0">
+                            <li>
+                                <a href="#!" class="text-dark">Link 1</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-dark">Link 2</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-dark">Link 3</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-dark">Link 4</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-uppercase">Links</h5>
+                        
+                        <ul class="list-unstyled mb-0">
+                            <li>
+                                <a href="#!" class="text-dark">Link 1</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-dark">Link 2</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-dark">Link 3</a>
+                            </li>
+                            <li>
+                                <a href="#!" class="text-dark">Link 4</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+        </div>
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+            © 2020 Copyright:
+            <a class="text-dark" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+        </div>
+    </footer>
+    <!-- fine footer -->
+    
+
+
+    
+    <!-- fragment script bs js  -->
+    <script th:fragment="script" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/
+    BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <!-- fine script  -->
+</body>
+</html>
