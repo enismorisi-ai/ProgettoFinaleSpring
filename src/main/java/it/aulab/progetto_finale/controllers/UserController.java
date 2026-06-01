@@ -56,6 +56,6 @@ public class UserController {
 
         redirectAttributes.addFlashAttribute("successMessage", "Registrazione avvenuta!");
 
-        return "redirect:/register?success";
+        return "redirect:/";
     }
 }

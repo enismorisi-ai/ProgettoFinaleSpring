@@ -2,6 +2,7 @@ package it.aulab.progetto_finale.services;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import it.aulab.progetto_finale.models.Role;
 import it.aulab.progetto_finale.models.User;
 import it.aulab.progetto_finale.repositories.UserRepository;
 
@@ -31,12 +33,21 @@ public class CustomUserDetailsService implements UserDetailsService{
             user.getUsername(),
             user.getEmail(),
             user.getPassword(),
-            getAuthorities()
+            mapRolesToAuthorities(user.getRoles())
         );
     }
 
-    public Collection<? extends GrantedAuthority> getAuthorities(){
-        return Arrays.asList(new SimpleGrantedAuthority("user"));
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles){
+        Collection<? extends GrantedAuthority> mapRoles = null;
+        if(roles.size() != 0){
+            mapRoles = roles.stream()
+            .map(role -> new SimpleGrantedAuthority(role.getName()))
+            .collect(Collectors.toList());
+        }
+        else{
+            mapRoles = Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+        return mapRoles;
     }
 
 }
