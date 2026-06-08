@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,43 +39,33 @@ public class ImageServiceImpl implements ImageService{
     private final RestTemplate restTemplate = new RestTemplate();
 
 
-    public void saveImageOnDB(String url, Article article) {
+    public Image saveImageOnDB(String url, Article article) {
         url = url.replace(supabaseBucket, supabaseImage);
-        imageRepository.save(Image.builder().path(url).article(article).build());
+        return imageRepository.save(Image.builder().path(url).article(article).build());
     }
 
     @Async
     public CompletableFuture<String> saveImageOnCloud(MultipartFile file) throws Exception {
-        if(!file.isEmpty()){
-            try{
-                String nameFile = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+        if(file != null && !file.isEmpty()){
+            String nameFile = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 
-                String extension = StringManipulation.getFileExtension(nameFile);
+            String extension = StringManipulation.getFileExtension(nameFile);
+            String separator = supabaseBucket.endsWith("/") ? "" : "/";
+            String url = supabaseUrl + supabaseBucket + separator + nameFile;
 
-                String url = supabaseUrl + supabaseBucket + nameFile;
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Content-Type", "image/" + extension);
+            headers.set("Authorization", "Bearer " + supabaseKey);
+            headers.set("apikey", supabaseKey);
 
-                MultiValueMap<String,Object> body = new LinkedMultiValueMap<>();
+            HttpEntity<byte[]> requestEntity = new HttpEntity<>(file.getBytes(), headers);
 
-                body.add("file", file.getBytes());
+            restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
 
-                HttpHeaders headers = new HttpHeaders();
-                headers.set("Content-Type", "image/" + extension);
-                headers.set("Authorization", "Bearer " + supabaseKey);
-
-                HttpEntity<byte[]> requestEntity = new HttpEntity<>(file.getBytes(), headers);
-
-                restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-
-                return CompletableFuture.completedFuture(url);
-            } catch(Exception e){
-                e.printStackTrace();
-            }
+            return CompletableFuture.completedFuture(url);
         }
-        else{
-            throw new IllegalArgumentException("File is empty");
-        }
-
-        return CompletableFuture.failedFuture(null);
+        
+        throw new IllegalArgumentException("File is empty");
     }
 
     @Async

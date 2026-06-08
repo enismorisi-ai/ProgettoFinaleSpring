@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -63,7 +64,7 @@ public class ArticleController {
 
     //Rotta per lo store di un articolo
     @PostMapping
-    public String articleStore(@Valid @ModelAttribute("article") Article article, BindingResult result, RedirectAttributes redirectAttributes, Principal principal, MultipartFile file, Model viewModel){
+    public String articleStore(@Valid @ModelAttribute("article") Article article, BindingResult result, RedirectAttributes redirectAttributes, Principal principal, @RequestParam(name = "file", required = false) MultipartFile file, Model viewModel){
         // Controllo degli errori con validazioni
         if(result.hasErrors()){
             viewModel.addAttribute("title", "Crea un articolo");
@@ -84,7 +85,6 @@ public class ArticleController {
         viewModel.addAttribute("title", "Article detail");
         viewModel.addAttribute("article", articleService.read(id));
         return "article/detail";
-
     }
     
 }

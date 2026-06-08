@@ -51,10 +51,12 @@
                     <p class="fs-5" th:if="${article.category == null}">Nessuna categoria</p>
 
                     <div class="text-muted my-3">
-                        <p>Redatto il <span th:text="${article.publishdate}"></span>
-                        da
-                        <a th:href="@{/search/{id}(id=${article.user.id})}" class="text-muted" th:text="${article.user.username}"></a>
-                        </p>
+                        <p>Redatto il <span th:text="${article.publishDate}"></span>
+                        da </p>
+                        <a th:href="@{/search/{id}(id=${article.user.id})}" class="text-muted">
+                            <span th:text="${article.user.username}"></span>
+                        </a>
+                        
                     </div>
                 </div>
             </div>

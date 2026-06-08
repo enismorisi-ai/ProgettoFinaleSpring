@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import jakarta.transaction.Transactional;
+
 import it.aulab.progetto_finale.dtos.ArticleDto;
 import it.aulab.progetto_finale.models.Article;
 import it.aulab.progetto_finale.models.Category;
@@ -38,8 +40,10 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
     private ModelMapper modelMapper;
 
     @Override
+    @Transactional
     public ArticleDto create(Article article, Principal principal, MultipartFile file) {
         String url = "";
+        boolean hasFile = file != null && !file.isEmpty();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication != null){
@@ -48,22 +52,22 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
             article.setUser(user);
         }
 
-        if(!file.isEmpty()){
+        if(hasFile){
             try{
                 CompletableFuture<String> futureUrl = imageService.saveImageOnCloud(file);
                 url = futureUrl.get();
             }
             catch(Exception e){
-                e.printStackTrace();
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore durante il salvataggio dell'immagine", e);
             }
         }
 
-        ArticleDto dto = modelMapper.map(articleRepository.save(article), ArticleDto.class);
-        if(!file.isEmpty()){
-            imageService.saveImageOnDB(url, article);
+        Article savedArticle = articleRepository.save(article);
+        if(hasFile){
+            savedArticle.setImage(imageService.saveImageOnDB(url, savedArticle));
         }
 
-        return dto;
+        return modelMapper.map(savedArticle, ArticleDto.class);
     }
 
     @Override
