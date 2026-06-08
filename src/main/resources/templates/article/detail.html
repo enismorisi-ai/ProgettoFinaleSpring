@@ -43,7 +43,7 @@
                 <div class="text-center">
                     <h2 th:text="${article.subtitle}">Sottotitolo</h2>
 
-                    <p class="fs-5">
+                    <p class="fs-5" th:if="${article.category != null}">
                         Categoria
                         <a th:href="@{/categories/search/{id}(id=${article.category.id})}" class="text-capitalize fw-bold text-muted" th:text="${article.category.name}">categoria</a>
                     </p>
@@ -53,7 +53,7 @@
                     <div class="text-muted my-3">
                         <p>Redatto il <span th:text="${article.publishdate}"></span>
                         da
-                        <a href="" class="text-muted" th:text="${article.user.username}"></a>
+                        <a th:href="@{/search/{id}(id=${article.user.id})}" class="text-muted" th:text="${article.user.username}"></a>
                         </p>
                     </div>
                 </div>

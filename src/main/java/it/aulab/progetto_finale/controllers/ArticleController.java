@@ -25,7 +25,6 @@ import it.aulab.progetto_finale.models.Category;
 import it.aulab.progetto_finale.services.ArticleService;
 import it.aulab.progetto_finale.services.CrudService;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -79,6 +78,7 @@ public class ArticleController {
         return "redirect:/";
     }
 
+    // Rotta di dettaglio di un articolo
     @GetMapping("/detail/{id}")
     public String detailArticle(@PathVariable Long id, Model viewModel) {
         viewModel.addAttribute("title", "Article detail");
