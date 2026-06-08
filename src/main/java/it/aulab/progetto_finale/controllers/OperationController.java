@@ -1,17 +1,24 @@
 package it.aulab.progetto_finale.controllers;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.aulab.progetto_finale.models.CareerRequest;
 import it.aulab.progetto_finale.models.Role;
+import it.aulab.progetto_finale.models.User;
 import it.aulab.progetto_finale.repositories.RoleRepository;
+import it.aulab.progetto_finale.repositories.UserRepository;
+import it.aulab.progetto_finale.services.CareerRequestService;
+
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Controller
@@ -20,6 +27,12 @@ public class OperationController {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CareerRequestService careerRequestService;
 
     // Rotta per la creazione di una richiesta di collaborazione
     @GetMapping("/career/request")
@@ -36,4 +49,21 @@ public class OperationController {
         return "career/requestForm";
     }
     
+    // Rotta per il salvataggio di una richiesta di ruolo
+    @PostMapping("/career/request/save")
+    public String careerRequestStore(@ModelAttribute("careerRequest") CareerRequest careerRequest, Principal principal, RedirectAttributes redirectAttributes){
+        User user = userRepository.findByEmail(principal.getName());
+
+        if(careerRequestService.isRoleAlreadyAssigned(user, careerRequest)){
+            redirectAttributes.addFlashAttribute("errorMessage", "Sei gia assegnato a questo ruolo");
+            return "redirect:/";
+        }
+
+        careerRequestService.save(careerRequest, user);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Richiesta inviata con successo");
+
+        return "redirect:/";
+    }
+
 }
