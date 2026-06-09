@@ -29,6 +29,8 @@ import it.aulab.progetto_finale.repositories.ArticleRepository;
 import it.aulab.progetto_finale.services.ArticleService;
 import it.aulab.progetto_finale.services.CrudService;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @Controller
@@ -107,4 +109,23 @@ public class ArticleController {
         viewModel.addAttribute("article", articleService.read(id));
         return "revisor/detail";
     }
+
+    // Rotta dedicata all'azione del revisore
+    @PostMapping("/accept")
+    public String articleSetAccepted(@RequestParam("action") String action, @RequestParam("articleId") Long articleId, RedirectAttributes redirectAttributes) {
+        if(action.equals("accept")){
+            articleService.setIsAccepted(true, articleId);
+            redirectAttributes.addFlashAttribute("resultMessage", "Articolo accettato!");
+        }
+        else if(action.equals("reject")){
+            articleService.setIsAccepted(false, articleId);
+            redirectAttributes.addFlashAttribute("resultMessage", "Articolo rifiutato!");
+        }
+        else{
+            redirectAttributes.addFlashAttribute("resultMessage", "Azione non corretta!");
+        }
+
+        return "redirect:/revisor/dashboard";
+    }
+    
 }
