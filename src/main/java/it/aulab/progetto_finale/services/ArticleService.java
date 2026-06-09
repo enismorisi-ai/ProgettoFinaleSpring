@@ -62,6 +62,8 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
             }
         }
 
+        article.setIsAccepted(null);
+
         Article savedArticle = articleRepository.save(article);
         if(hasFile){
             savedArticle.setImage(imageService.saveImageOnDB(url, savedArticle));

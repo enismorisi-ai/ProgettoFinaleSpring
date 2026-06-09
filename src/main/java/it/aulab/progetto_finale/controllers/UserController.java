@@ -1,10 +1,12 @@
 package it.aulab.progetto_finale.controllers;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +14,9 @@ import org.springframework.validation.BindingResult;
 
 import it.aulab.progetto_finale.dtos.ArticleDto;
 import it.aulab.progetto_finale.dtos.UserDto;
+import it.aulab.progetto_finale.models.Article;
 import it.aulab.progetto_finale.models.User;
+import it.aulab.progetto_finale.repositories.ArticleRepository;
 import it.aulab.progetto_finale.repositories.CareerRequestRepository;
 import it.aulab.progetto_finale.services.ArticleService;
 import it.aulab.progetto_finale.services.CategoryService;
@@ -38,15 +42,27 @@ public class UserController {
     private ArticleService articleService;
 
     @Autowired
+    private ArticleRepository articleRepository;
+
+    @Autowired
     private CareerRequestRepository careerRequestRepository;
 
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
+    // Rotta di home
     @GetMapping("/")
     public String home(Model viewModel) {
         
-        List<ArticleDto> articles = articleService.readAll();
+        //Recupero tutti gli articoli accettati
+        List<ArticleDto> articles = new ArrayList<ArticleDto>();
+
+        for(Article article : articleRepository.findByIsAcceptedTrue()){
+            articles.add(modelMapper.map(article, ArticleDto.class));
+        }
         
         //ordino e invio al template gli articoli ordinati in modo decrescente
         Collections.sort(articles, Comparator.comparing(ArticleDto::getPublishDate).reversed());
@@ -108,5 +124,12 @@ public class UserController {
         viewModel.addAttribute("requests", careerRequestRepository.findByIsCheckedFalse());
         viewModel.addAttribute("categories", categoryService.readAll());
         return "admin/dashboard";
+    }
+
+    @GetMapping("/revisor/dashboard")
+    public String revisorDashboard(Model viewModel){
+        viewModel.addAttribute("title", "Articoli da revisionare");
+        viewModel.addAttribute("articles", articleRepository.findByIsAcceptedIsNull());
+        return "revisor/dashboard";
     }
 }
