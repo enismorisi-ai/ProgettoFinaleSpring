@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{index :: head}"></head>
+<body>
+    <nav th:replace="~{index :: navbar}"></nav>
+
+    <div class="container">
+        <div class="row">
+            <header class="col-12 my-5">
+                <h1 class="text-center" th:text="${title}"></h1>
+            </header>
+
+            <div class="col-12 my-5">
+                <form th:action="@{/categories/update/{id}(id=${category.id})}" method="post" th:object="${category}">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="name" class="form-label">Nome categoria</label>
+                            <input type="text" id="name" class="form-control" th:field="*{name}" placeholder="Inserisci il nome...">
+                            <p th:errors="*{name}" class="text-danger" th:if="${#fields.hasErrors('name')}"></p>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Aggiorna categoria</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <footer th:replace="~{index :: footer}"></footer>
+    <script th:replace="~{index :: script}"></script>
+</body>
+</html>
