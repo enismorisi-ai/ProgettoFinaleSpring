@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:fragment="head">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,14 +19,14 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li sec:authorize="isAuthenticated && hasRole('ROLE_WRITER')" class="nav-item">
+                    <li sec:authorize="isAuthenticated() and hasRole('WRITER')" class="nav-item">
                         <a class="nav-link" aria-current="page" href="/articles/create">Crea articolo</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/articles">Tutti gli articoli</a>
                     </li>
                     <!-- dashboard ADMIN  -->
-                    <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                         <div class="d-flex">
                             <a class="nav-link" href="/admin/dashboard">Dashboard Admin</a>
 
@@ -38,7 +38,7 @@
                     </li>
 
                     <!-- dashboard REVISOR  -->
-                    <li class="nav-item" sec:authorize="hasRole('ROLE_REVISOR')">
+                    <li class="nav-item" sec:authorize="hasRole('REVISOR')">
                         <div class="d-flex">
                             <a href="/revisor/dashboard" class="nav-link">Dashboard Revisor</a>
                             <div class="mt-1" th:if="${articlesToBeRevised > 0}">
@@ -49,7 +49,7 @@
                     </li>
 
                     <!-- dashboard WRITER  -->
-                    <li class="nav-item" sec:authorize="hasRole('ROLE_WRITER')">
+                    <li class="nav-item" sec:authorize="hasRole('WRITER')">
                         <a href="/writer/dashboard" class="nav-link">Dashboard writer</a>
                     </li>
 
@@ -58,21 +58,21 @@
                             Accesso
                         </a>
                         <ul class="dropdown-menu">
-                            <li sec:authorize="isAnonymous">
+                            <li sec:authorize="isAnonymous()">
                                 <a class="dropdown-item" th:href="@{/register}">Register</a>
                             </li>
-                            <li sec:authorize="isAnonymous">
+                            <li sec:authorize="isAnonymous()">
                                 <a class="dropdown-item" th:href="@{/login}">Login</a>
                             </li>
                             <!-- questo lo devo mostrare solo se l'utente non e' anonimo -->
-                            <li sec:authorize="isAnonymous">
+                            <li sec:authorize="isAuthenticated()">
                                 <a class="dropdown-item" th:href="@{/logout}">Logout</a>
                             </li>
                         </ul>
                     </li>   
                 </ul>
                 <!-- <div sec:authorize="isAuthenticated" th:text="'Benvenuto: ' + ${#authentication.principal.fullname} + ' - ' + ${#authentication.principal.authorities[0].authority.replace('ROLE','')}">Benvenuto</div> -->
-                <div sec:authorize="isAuthenticated">Benvenuto</div>
+                <div sec:authorize="isAuthenticated()" th:text="'Benvenuto: ' + ${#authentication.principal.username}">[Benvenuto]</div>
                 <form class="d-flex" th:action="@{/articles/search}" method="get">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword"/>
                     <button class="btn btn-outline-success" type="submit">Search</button>
