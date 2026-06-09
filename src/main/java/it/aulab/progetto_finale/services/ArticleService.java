@@ -3,6 +3,7 @@ package it.aulab.progetto_finale.services;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -98,9 +99,72 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
     }
 
     @Override
-    public ArticleDto update(Long key, Article model, MultipartFile file) {
-        // TODO Auto-generated method stub
-        return null;
+    @Transactional
+    public ArticleDto update(Long key, Article updatedArticle, MultipartFile file) {
+        String url = "";
+        boolean hasFile = file != null && !file.isEmpty();
+
+        //Controllo l'esistenza dell'articolo in base al suo id
+        if(articleRepository.existsById(key)){
+            //Assegno all'articolo proveniente dal form lo stesso id dell'articolo originale
+            updatedArticle.setId(key);
+            //Recupero l'articolo originale non modificato
+            Article article = articleRepository.findById(key).get();
+            //Imposto l'utente dell'articolo del form con l'utente dell'articolo originale
+            updatedArticle.setUser(article.getUser());
+
+            // Controllo se l'immagine e' presente nel form
+            if(hasFile){
+                try{
+                    // Elimino l'immagine precedente
+                    if(article.getImage() != null){
+                        imageService.deleteImage(article.getImage().getPath());
+                    }
+                    
+                    // Salvo la nuova immagine
+                    CompletableFuture<String> futureUrl = imageService.saveImageOnCloud(file);
+                    url = futureUrl.get();
+
+                    // Essendo l'immagine modificata, l'articolo torna in revisione
+                    updatedArticle.setIsAccepted(null);
+                    Article savedArticle = articleRepository.save(updatedArticle);
+                    //Salvo il nuovo path nel db
+                    savedArticle.setImage(imageService.saveImageOnDB(url, savedArticle));
+
+                    return modelMapper.map(savedArticle, ArticleDto.class);
+                } catch(Exception e){
+                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore durante l'aggiornamento dell'immagine", e);
+                }
+            }
+            else{
+                // Se l'immagine non e' stata modificata posso impostare sull'articolo modificato la stessa immagine dell'articolo originale
+                updatedArticle.setImage(article.getImage());
+
+                // Se i campi sono diversi l'articolo torna in revisione
+                if(hasArticleContentChanged(article, updatedArticle)){
+                    updatedArticle.setIsAccepted(null);
+                }
+                else{
+                    updatedArticle.setIsAccepted(article.getIsAccepted());
+                }
+
+                return modelMapper.map(articleRepository.save(updatedArticle), ArticleDto.class);
+            }
+        }
+        else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private boolean hasArticleContentChanged(Article article, Article updatedArticle) {
+        Long articleCategoryId = article.getCategory() != null ? article.getCategory().getId() : null;
+        Long updatedArticleCategoryId = updatedArticle.getCategory() != null ? updatedArticle.getCategory().getId() : null;
+
+        return !Objects.equals(article.getTitle(), updatedArticle.getTitle())
+            || !Objects.equals(article.getSubtitle(), updatedArticle.getSubtitle())
+            || !Objects.equals(article.getBody(), updatedArticle.getBody())
+            || !Objects.equals(article.getPublishDate(), updatedArticle.getPublishDate())
+            || !Objects.equals(articleCategoryId, updatedArticleCategoryId);
     }
     
     public List<ArticleDto> searchByCategory(Category category){
