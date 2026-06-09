@@ -75,8 +75,21 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
 
     @Override
     public void delete(Long key) {
-        // TODO Auto-generated method stub
-        
+        if(articleRepository.existsById(key)){
+            Article article = articleRepository.findById(key).get();
+
+            try{
+                String path = article.getImage().getPath();
+                article.getImage().setArticle(null);
+                imageService.deleteImage(path);
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+
+            articleRepository.deleteById(key);
+        } else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Override
