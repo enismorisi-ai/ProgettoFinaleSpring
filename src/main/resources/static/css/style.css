@@ -139,8 +139,10 @@ a:hover {
 }
 
 .alert-success {
-    color: #314320;
-    background: #edf4dc;
+    /* color: #314320;
+    background: #edf4dc; */
+    color: black;
+    background: rgb(220, 174, 9);
 }
 
 .alert-danger {
@@ -297,6 +299,11 @@ h5,
     background-color: rgba(47, 33, 27, 0.28);
 }
 
+
+@media screen and (max-width: 576px){
+
+}
+
 @media (max-width: 767.98px) {
     .navbar .d-flex {
         flex-wrap: wrap;
@@ -322,8 +329,8 @@ h5,
         width: min(100%, 22rem) !important;
     }
 
-    .table {
+    /* .table {
         display: block;
         overflow-x: auto;
-    }
+    } */
 }

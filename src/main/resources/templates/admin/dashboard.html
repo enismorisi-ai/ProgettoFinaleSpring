@@ -19,23 +19,23 @@
             </div>
 
             <div class="col-12">
-                <table class="table table-striped table-responsive-lg">
+                <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Id</th>
                             <th>Utente</th>
                             <th>Per il ruolo</th>
                             <th>#Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="request:${requests}">
-                            <td th:text="${request.id}"></td>
+                        <tr th:each="request:${requests}" class="h-100">
                             <td th:text="${request.user.username}"></td>
-                            <td th:text="${request.role.name}"></td>
+                            <td>
+                                <span th:text="${request.role.name.substring(5)}"></span>
+                            </td>
                             <td>
                                 <a th:href="@{/operations/career/request/detail/{id}(id=${request.id})}" class="btn btn-primary m-2">
-                                    Dettagli
+                                    <span class="d-none d-md-inline">Dettagli</span>
                                     <i class="fa-solid fa-bars"></i>
                                 </a>
                             </td>
@@ -45,9 +45,9 @@
             </div>
 
             <div class="col-12 my-5 d-flex justify-content-center align-items-center">
-                <span class="h1">Tutte le categorie</span>
-                <a th:href="@{/categories/create}" class="btn btn-primary m-2">
-                    Aggiungi
+                <span class="h1 mt-0">Tutte le categorie</span>
+                <a th:href="@{/categories/create}" class="btn btn-primary ms-4">
+                    <span class="d-none d-md-inline">Aggiungi</span>
                     <i class="fa-solid fa-plus"></i>
                 </a>
             </div>
@@ -56,22 +56,22 @@
                 <table class="table table-striped table-responsive-lg">
                     <thead>
                         <tr>
-                            <th>Id</th>
+                            <!-- <th>Id</th> -->
                             <th>Nome</th>
-                            <th class="text-end">#Actions</th>
+                            <th class="text-end pe-4">#Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="category:${categories}">
-                            <td th:text="${category.id}"></td>
+                            <!-- <td th:text="${category.id}"></td> -->
                             <td th:text="${category.name}"></td>
                             <td class="text-end">
                                 <a th:href="@{/categories/edit/{id}(id=${category.id})}" class="btn btn-warning m-2">
-                                    Modifica
+                                    <span class="d-none d-md-inline">Modifica</span>
                                     <i class="fa-solid fa-pencil"></i>
                                 </a>
                                 <a th:href="@{/categories/delete/{id}(id=${category.id})}" class="btn btn-danger m-2">
-                                    Cancella
+                                    <span class="d-none d-md-inline">Cancella</span>
                                     <i class="fa-solid fa-trash"></i>
                                 </a>
                             </td>

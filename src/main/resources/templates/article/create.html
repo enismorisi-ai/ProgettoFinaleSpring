@@ -8,8 +8,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 justify-content-between align-items-center">
-                    <div class="d-flex">
-                        <h1 th:text="${title}">Inserisci un articolo</h1>
+                    <div class="d-flex justify-content-center justify-content-md-start ">
+                        <h1 th:text="${title}">[Inserisci un articolo]</h1>
                     </div>
                 </div>
 
@@ -43,11 +43,13 @@
                                 <option th:each="category:${categories}"  th:value="${category.id}" th:text="${category.name}"></option>
                             </select>
                         </div>
-                        <div class="mb-3">
+                        <div class="">
                             <label for="image" class="form-label">Immagine</label>
                             <input type="file" name="file" id="image" class="form-control">
                         </div>
-                        <button type="submit" class="btn btn-success">Crea articolo</button>
+                        <div class="mt-5 d-flex justify-content-center d-md-block ">
+                            <button type="submit" class="btn btn-success">Crea articolo</button>
+                        </div>
                     </form>
                 </div>
             </div>
