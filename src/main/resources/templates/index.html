@@ -73,8 +73,8 @@
                         </ul>
                     </li>   
                 </ul>
-                <!-- <div sec:authorize="isAuthenticated" th:text="'Benvenuto: ' + ${#authentication.principal.fullname} + ' - ' + ${#authentication.principal.authorities[0].authority.replace('ROLE','')}">Benvenuto</div> -->
-                <div sec:authorize="isAuthenticated()" th:text="'Benvenuto: ' + ${#authentication.principal.username}">[Benvenuto]</div>
+                <!-- show full name instead of email -->
+                <div sec:authorize="isAuthenticated()" th:text="'Benvenuto: ' + ${#authentication.principal.fullName}">[Benvenuto]</div>
                 <form class="d-flex" th:action="@{/articles/search}" method="get">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword"/>
                     <button class="btn btn-outline-success" type="submit">Search</button>

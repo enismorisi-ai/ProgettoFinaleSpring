@@ -4,43 +4,49 @@
 <body>
     <nav th:replace="~{index :: navbar}"></nav>
 
-    <div class="vh-100">
+    <div class="min-vh-100 d-flex align-items-center justify-content-center py-4">
         <div class="container">
-            <div class="row col-md-8 offset-md-2">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="text-center">Registration</h2>
-                    </div>
-                    <div th:if="${param.success}">
-                        <div class="alert alert-info">
-                            You have successfully registered to our app!
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-11 col-lg-9 col-xl-8">
+                    <div class="auth-panel rounded-4 shadow-lg p-4 mx-auto" style="width:min(100%, 980px); max-width: 980px; min-height: 75vh; background-color: rgba(255,255,255,0.97); box-sizing: border-box;">
+                        <div class="text-center mb-4">
+                            <h2 class="mb-0">Registration</h2>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <form th:action="@{/register/save}" method="post" role="form" th:object="${user}">
-                            <div class="form-group mb-3">
-                                <label for="firstName" class="form-label">First Name</label>
-                                <input type="text" id="firstName" class="form-control" name="firstName" placeholder="John" th:field="*{firstName}">
+                        <div class="d-flex flex-column justify-content-center h-100">
+                            <div th:if="${param.success}">
+                                <div class="alert alert-info">
+                                    You have successfully registered to our app!
+                                </div>
                             </div>
-                            <div class="form-group mb-3">
-                                <label for="lastName" class="form-label">Last Name</label>
-                                <input type="text" id="lastName" class="form-control" name="lastName" placeholder="Doe" th:field="*{lastName}">
-                            </div>
-                            <div class="form-group mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" id="email" class="form-control" name="email" placeholder="john@doe.eng" th:field="*{email}">
-                                <p th:errors="*{email}" class="text-danger" th:if="${#fields.hasErrors('email')}"></p>
-                            </div>
-                            <div class="form-group mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" id="password" class="form-control" name="password"  th:field="*{password}">
-                                <p th:errors="*{password}" class="text-danger" th:if="${#fields.hasErrors('password')}"></p>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Register</button>
-                                <span>Already Registered? <a th:href="@{/login}">Login here</a></span>
-                            </div>
-                        </form>
+                            <form th:action="@{/register/save}" method="post" role="form" th:object="${user}">
+                                <div class="form-group mb-3">
+                                    <label for="firstName" class="form-label">First Name</label>
+                                    <input type="text" id="firstName" class="form-control" name="firstName" placeholder="John" th:field="*{firstName}">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <input type="text" id="lastName" class="form-control" name="lastName" placeholder="Doe" th:field="*{lastName}">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" id="email" class="form-control" name="email" placeholder="john@doe.eng" th:field="*{email}">
+                                    <p th:errors="*{email}" class="text-danger" th:if="${#fields.hasErrors('email')}"></p>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" id="password" class="form-control" name="password" th:field="*{password}">
+                                    <p th:errors="*{password}" class="text-danger" th:if="${#fields.hasErrors('password')}"></p>
+                                </div>
+                                <div class="row gx-3 gy-3 mt-4 align-items-center">
+                                    <div class="col-12 col-sm-auto">
+                                        <button type="submit" class="btn btn-primary btn-lg px-4 w-100 w-sm-auto">Register</button>
+                                    </div>
+                                    <div class="col-12 col-sm">
+                                        <span class="d-block">Already Registered? <a th:href="@{/login}">Login here</a></span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
